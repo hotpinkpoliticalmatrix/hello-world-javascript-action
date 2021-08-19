@@ -1,8 +1,8 @@
 name: "Hello World"
 description: "Greet someone and record the time"
 inputs:
- type-of-hotfix: # id of input
-  description: "What kind of hotfix"
+ current-branch: # id of input
+  description: "Get current branch"
   required: true
   default: "Staging"
  who-to-greet: # id of input
