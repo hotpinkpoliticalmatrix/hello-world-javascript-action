@@ -1,7 +1,4 @@
-on:
- push:
-  branches:
-   - "*/release/*"
+on: [push]
 
 jobs:
  identify_target_branch:
