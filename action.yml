@@ -1,10 +1,10 @@
 name: 'Hello World'
 description: 'Greet someone and record the time'
 inputs:
-  who-to-greet:  # id of input
-    description: 'Who to greet'
+  type-of-hotfix:  # id of input
+    description: 'What kind of hotfix'
     required: true
-    default: 'World'
+    default: 'Staging'
 outputs:
   time: # id of output
     description: 'The time we greeted you'

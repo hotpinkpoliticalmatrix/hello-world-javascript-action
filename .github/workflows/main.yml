@@ -1,15 +1,38 @@
-on: [push]
+on:
+ push:
+  branches:
+   - "*/release/*"
 
 jobs:
-  hello_world_job:
-    runs-on: ubuntu-latest
-    name: A job to say hello
-    steps:
-      - name: Hello world action step
-        id: hello
-        uses: hotpinkpoliticalmatrix/hello-world-javascript-action@v1.1
-        with:
-          who-to-greet: 'Mona the Octocat'
-      # Use the output from the `hello` step
-      - name: Get the output time
-        run: echo "The time was ${{ steps.hello.outputs.time }}"
+ identify_target_branch:
+  runs-on: ubuntu-latest
+  name: Staging or Prod
+  steps:
+   - name: Extract branch name
+     shell: bash
+     run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+     id: extract_branch
+   - name: Show branch name
+     run: echo ${{ steps.extract_branch.outputs.branch }}
+ #   - name: Hello world action step
+ #     id: hello
+ #     uses: hotpinkpoliticalmatrix/hello-world-javascript-action@v1.1
+ #     with:
+ #         type-of-hotfix: 'Mona the Octocat'
+ #     #get name of staging
+ #     #get name of prod
+ #     if: endsWith(${{ steps.extract_branch.outputs.branch }},
+ #     # if current branch is staging
+ #   - name: Set target as staging
+ #     run: echo '::set-output name=TARGET_BRANCH::staging'
+ #     id: set-target-staging
+ #   #if current branch is prod
+ #   -
+ # get_output_time:
+ #   runs-on: ubuntu-latest
+ #   name: A job to say hello
+ #   steps:
+ #     - name: Get the output time
+ #       run: echo "The time was ${{ steps.hello.outputs.time }}"
+
+ # Use the output from the `hello` step
