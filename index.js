@@ -10,29 +10,30 @@ try {
   const result = Math.floor((date.getDay() + 1 + numberOfDays) / 7)
   return result
  }
+ const currentBranch = core.getInput("current-branch")
  const staging = `**/release/${currYear}.${getWeek()}`
  const prod = `**/release/${currYear}.${getWeek() - 1}`
+ console.log(currentBranch)
+ //  core.setOutput("production-branch", prod)
+ //  core.setOutput("staging-branch", staging)
 
- core.setOutput("production-branch", prod)
- core.setOutput("staging-branch", staging)
+ //  const time = new Date().toTimeString()
+ //  core.setOutput("time", time)
+ //  // Get the JSON webhook payload for the event that triggered the workflow
+ //  const payload = JSON.stringify(github.context.payload, undefined, 2)
+ //  console.log(`The event payload: ${payload}`)
 
- const time = new Date().toTimeString()
- core.setOutput("time", time)
- // Get the JSON webhook payload for the event that triggered the workflow
- const payload = JSON.stringify(github.context.payload, undefined, 2)
- console.log(`The event payload: ${payload}`)
-
- const nameToGreet = core.getInput("type-of-hotfix")
- console.log(`Hello ${nameToGreet}!`)
+ //  const nameToGreet = core.getInput("type-of-hotfix")
+ //  console.log(`Hello ${nameToGreet}!`)
 } catch (error) {
  core.setFailed(error.message)
 }
 
-const typeOfHotfix = core.getInput("hotfix-type")
-const formatBranchNameForMaster = () => {
- const currYear = new Date().getFullYear()
- return `**/release/${currYear}.${getWeek()}`
-}
-core.setOutput("branch-name", formatBranchNameForMaster())
-const payload = JSON.stringify(github.context.payload, undefined, 2)
-console.log(`The event payload: ${payload}`)
+// const typeOfHotfix = core.getInput("hotfix-type")
+// const formatBranchNameForMaster = () => {
+//  const currYear = new Date().getFullYear()
+//  return `**/release/${currYear}.${getWeek()}`
+// }
+// core.setOutput("branch-name", formatBranchNameForMaster())
+// const payload = JSON.stringify(github.context.payload, undefined, 2)
+// console.log(`The event payload: ${payload}`)
