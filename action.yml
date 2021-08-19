@@ -1,13 +1,17 @@
-name: 'Hello World'
-description: 'Greet someone and record the time'
+name: "Hello World"
+description: "Greet someone and record the time"
 inputs:
-  type-of-hotfix:  # id of input
-    description: 'What kind of hotfix'
-    required: true
-    default: 'Staging'
+ current-branch: # id of input
+  description: "Get current branch"
+  required: true
+  default: "Staging"
+ who-to-greet: # id of input
+  description: "Who to greet"
+  required: true
+  default: "World"
 outputs:
-  time: # id of output
-    description: 'The time we greeted you'
+ time: # id of output
+  description: "The time we greeted you"
 runs:
-  using: 'node12'
-  main: 'index.js'
+ using: "node12"
+ main: "index.js"
