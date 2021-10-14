@@ -32,11 +32,18 @@ try {
  const stagingBranch = `release/${stagingYear}.${stagingWeek}`
  //to do: fix for december
  const isPushToStaging = currentBranch === stagingBranch
- const isPushToProd = currentBranch === productionBranch
+ const isPushToProduction = currentBranch === productionBranch
+
+ console.log(
+  productionBranch,
+  stagingBranch,
+  isPushToProduction,
+  isPushToStaging
+ )
  core.setOutput("productionBranch", productionBranch)
  core.setOutput("stagingBranch", stagingBranch)
  core.setOutput("isPushToStaging", isPushToStaging)
- core.setOutput("isPushToProduction", isPushToProd)
+ core.setOutput("isPushToProduction", isPushToProduction)
 
  // Get the JSON webhook payload for the event that triggered the workflow
  const payload = JSON.stringify(github.context.payload, undefined, 2)
