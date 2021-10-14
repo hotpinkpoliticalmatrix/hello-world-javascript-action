@@ -14,7 +14,7 @@ const adjustForYearEnd = (currWeek, currYear, stagingWeek, stagingYear) => {
   stagingWeek = 01
  } else {
   stagingYear = currYear
-  stagingWeek = result
+  stagingWeek = currWeek + 1
  }
 }
 
