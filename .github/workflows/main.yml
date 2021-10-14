@@ -7,18 +7,18 @@ jobs:
   steps:
    # To use this repository's private action,
    # you must check out the repository
-   #  - name: Checkout
-   #    uses: actions/checkout@v2
-    - name: Hello world action step
-      uses: ./ # Uses an action in the root directory
-      id: hello
-      with:
-       who-to-greet: "Mona the Octocat"
+   - name: Checkout
+     uses: actions/checkout@v2
+   - name: Hello world action step
+     uses: ./ # Uses an action in the root directory
+     id: hello
+     with:
+      who-to-greet: "Mona the Octocat"
    # Use the output from the `hello` step
-   - name: Get current production branch
-     run: echo "The current production branch is ${{ steps.hello.outputs.productionBranch }}"
-   - name: Get current staging branch
-     run: echo "The current staging branch is ${{ steps.hello.outputs.stagingBranch }}"
+   - name: Get the production branch
+     run: echo "The time was ${{ steps.hello.outputs.productionBranch }}"
+   - name: Get the staging branch
+     run: echo "The time was ${{ steps.hello.outputs.stagingBranch }}"
 # on: [push]
 
 # jobs:
