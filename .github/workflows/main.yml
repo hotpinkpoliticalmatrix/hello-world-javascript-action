@@ -23,6 +23,10 @@ jobs:
      run: echo "The time was ${{ steps.hello.outputs.productionBranch }}"
    - name: Get the staging branch
      run: echo "The time was ${{ steps.hello.outputs.stagingBranch }}"
+   - name: Confirm push was to staging
+     run: echo "The time was ${{ steps.hello.outputs.isPushToStaging }}"
+   - name: Confirm push was to prod
+     run: echo "The time was ${{ steps.hello.outputs.isPushToProd }}"
 # on: [push]
 
 # jobs:

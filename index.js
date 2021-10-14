@@ -2,15 +2,15 @@ const core = require("@actions/core")
 const github = require("@actions/github")
 
 try {
- // `who-to-greet` input defined in action metadata file
- const nameToGreet = core.getInput("who-to-greet")
+ //get current branch from input
+ const currentBranch = core.getInput("who-to-greet")
  const getWeek = (date = new Date()) => {
   const oneJan = new Date(date.getFullYear(), 0, 1)
   const numberOfDays = Math.floor((date - oneJan) / (24 * 60 * 60 * 1000))
   const result = Math.floor((date.getDay() + 1 + numberOfDays) / 7)
   return result
  }
- console.log(`Hello ${nameToGreet}!`)
+ console.log(`Hello ${currentBranch}!`)
  const time = new Date().toTimeString()
  const currYear = new Date().getFullYear()
  const currWeek = getWeek()
@@ -18,13 +18,16 @@ try {
  const stagingBranch = `release/${currYear}.${currWeek + 1}`
  const masterBranch = `release/${currYear}.${currWeek + 2}`
  //to do: fix for december
-
+ const isPushToStaging = currentBranch === stagingBranch
+ const isPushToProd = currentBranch === productionBranch
  core.setOutput("productionBranch", productionBranch)
  core.setOutput("stagingBranch", stagingBranch)
+ core.setOutput("isPushToStaging", isPushToStaging)
+ core.setOutput("isPushToProd", isPushToProd)
 
  // Get the JSON webhook payload for the event that triggered the workflow
- const payload = JSON.stringify(github.context.payload, undefined, 2)
- console.log(`The event payload: ${payload}`)
+ //  const payload = JSON.stringify(github.context.payload, undefined, 2)
+ //  console.log(`The event payload: ${payload}`)
 } catch (error) {
  core.setFailed(error.message)
 }
