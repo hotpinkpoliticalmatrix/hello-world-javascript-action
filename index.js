@@ -8,7 +8,10 @@ const getWeek = (date = new Date()) => {
  return result
 }
 
-const adjustForYearEnd = (currWeek, currYear, stagingWeek, stagingYear) => {
+const adjustForYearEnd = (currWeek) => {
+ let currYear = new Date().getFullYear()
+ let stagingWeek
+ let stagingYear
  if (currWeek === 52) {
   stagingYear = currYear + 1
   stagingWeek = 01
@@ -16,17 +19,15 @@ const adjustForYearEnd = (currWeek, currYear, stagingWeek, stagingYear) => {
   stagingYear = currYear
   stagingWeek = currWeek + 1
  }
+ return { currYear, stagingWeek, stagingYear }
 }
 
 try {
  //get current branch from input
  const currentBranch = core.getInput("current-branch")
- let currYear = new Date().getFullYear()
- let stagingWeek
- let stagingYear
 
  const currWeek = getWeek()
- adjustForYearEnd(currWeek, currYear, stagingWeek, stagingYear)
+ const { currYear, stagingWeek, stagingYear } = adjustForYearEnd(currWeek)
 
  const productionBranch = `release/${currYear}.${currWeek}`
  const stagingBranch = `release/${stagingYear}.${stagingWeek}`
