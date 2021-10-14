@@ -14,7 +14,8 @@ try {
  const time = new Date().toTimeString()
  const currYear = new Date().getFullYear()
  const currWeek = getWeek()
- core.setOutput("currWeek", currWeek)
+ const productionBranch = `release/${currYear}.${currWeek}`
+ core.setOutput("productionBranch", productionBranch)
 
  // Get the JSON webhook payload for the event that triggered the workflow
  const payload = JSON.stringify(github.context.payload, undefined, 2)
