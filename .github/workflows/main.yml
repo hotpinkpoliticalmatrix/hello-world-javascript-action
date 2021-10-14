@@ -29,8 +29,13 @@ jobs:
      run: echo "The merge was made to prod is ${{ steps.hello.outputs.isPushToProd }}"
    - name: Open PR current branch is staging
      if: ${{ steps.hello.outputs.isPushToStaging == 'true' }}
-     run: echo "The merge was made to staging is ${{ steps.hello.outputs.isPushToStaging }}"
-   - name: Open PR current branch is staging
+     id: pull
+     uses: tretuna/sync-branches@1.4.0
+     with:
+      GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      FROM_BRANCH: ${{ steps.hello.outputs.isPushToStaging }}
+      TO_BRANCH: "master"
+   - name: Open PR current branch is prod
      if: ${{ steps.hello.outputs.isPushToProd == 'true' }}
      run: echo "The merge was made to staging is ${{ steps.hello.outputs.isPushToProd }}"
 
