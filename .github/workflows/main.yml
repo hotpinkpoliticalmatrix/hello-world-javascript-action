@@ -26,7 +26,7 @@ jobs:
    - name: Confirm push was to staging
      run: echo "The merge was made to staging is ${{ steps.hello.outputs.isPushToStaging }}"
    - name: Confirm push was to prod
-     run: echo "The merge was made to prod is ${{ steps.hello.outputs.isPushToProd }}"
+     run: echo "The merge was made to prod is ${{ steps.hello.outputs.isPushToProduction }}"
    - name: Open PR current branch is staging
      if: ${{ steps.hello.outputs.isPushToStaging == 'true' }}
      id: pull
@@ -36,9 +36,13 @@ jobs:
       FROM_BRANCH: ${{ steps.hello.outputs.stagingBranch }}
       TO_BRANCH: "master"
    - name: Open PR current branch is prod
-     if: ${{ steps.hello.outputs.isPushToProd == 'true' }}
-     run: echo "The merge was made to staging is ${{ steps.hello.outputs.isPushToProd }}"
-
+     if: ${{ steps.hello.outputs.isPushToProduction == 'true' }}
+     id: pull
+     uses: tretuna/sync-branches@1.4.0
+     with:
+      GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      FROM_BRANCH: ${{ steps.hello.outputs.productionBranch }}
+      TO_BRANCH: ${{ steps.hello.outputs.stagingBranch }}
      #   uses: tretuna/sync-branches@1.2.0
      #     with:
      #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
