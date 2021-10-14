@@ -20,13 +20,13 @@ jobs:
       who-to-greet: ${{ steps.extract_branch.outputs.branch }}
      # Use the output from the `hello` step
    - name: Get the production branch
-     run: echo "The time was ${{ steps.hello.outputs.productionBranch }}"
+     run: echo "The production branch is ${{ steps.hello.outputs.productionBranch }}"
    - name: Get the staging branch
-     run: echo "The time was ${{ steps.hello.outputs.stagingBranch }}"
+     run: echo "The staging branch is ${{ steps.hello.outputs.stagingBranch }}"
    - name: Confirm push was to staging
-     run: echo "The time was ${{ steps.hello.outputs.isPushToStaging }}"
+     run: echo "The merge was made to staging is ${{ steps.hello.outputs.isPushToStaging }}"
    - name: Confirm push was to prod
-     run: echo "The time was ${{ steps.hello.outputs.isPushToProd }}"
+     run: echo "The merge was made to prod is ${{ steps.hello.outputs.isPushToProd }}"
 # on: [push]
 
 # jobs:
