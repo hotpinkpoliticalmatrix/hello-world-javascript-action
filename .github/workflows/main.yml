@@ -15,7 +15,7 @@ jobs:
    - name: Checkout
      uses: actions/checkout@v2
    - name: Hotfix action step
-     uses: ./ # Where the script will live
+     uses: ./script/action.yml # Where the script will live
      id: hotfix
      with:
       current-branch: ${{ steps.extract_branch.outputs.branch }}
