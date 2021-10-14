@@ -9,11 +9,11 @@ jobs:
    # you must check out the repository
    #  - name: Checkout
    #    uses: actions/checkout@v2
-   #  - name: Hello world action step
-   #    uses: ./ # Uses an action in the root directory
-   #    id: hello
-   #    with:
-   #     who-to-greet: "Mona the Octocat"
+    - name: Hello world action step
+      uses: ./ # Uses an action in the root directory
+      id: hello
+      with:
+       who-to-greet: "Mona the Octocat"
    # Use the output from the `hello` step
    - name: Get current production branch
      run: echo "The current production branch is ${{ steps.hello.outputs.productionBranch }}"
