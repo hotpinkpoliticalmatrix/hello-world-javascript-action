@@ -28,7 +28,7 @@ jobs:
    - name: Confirm push was to prod
      run: echo "The merge was made to prod is ${{ steps.hello.outputs.isPushToProd }}"
    - name: Open PR current branch is staging
-     if: ${{ steps.hello.outputs.isPushToStaging }}
+     if: steps.hello.outputs.isPushToStaging == true
      run: echo "The merge was made to prod is ${{ steps.hello.outputs.isPushToProd }}"
 
      #   uses: tretuna/sync-branches@1.2.0
