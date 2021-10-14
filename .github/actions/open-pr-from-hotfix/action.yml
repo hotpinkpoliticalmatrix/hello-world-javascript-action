@@ -1,0 +1,12 @@
+name: 'Automate opening hotfix PRs upstream'
+description: 'Automatically open PRs from prod --> staging and staging --> master'
+inputs:
+  current-branch: # id of input
+    description: 'Get current branch'
+    required: true
+outputs:
+  hotfix: # id of output
+    description: 'Branch information'
+runs:
+  using: 'node12'
+  main: 'index.js'
