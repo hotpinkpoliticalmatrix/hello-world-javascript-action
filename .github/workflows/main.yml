@@ -33,7 +33,7 @@ jobs:
      uses: tretuna/sync-branches@1.4.0
      with:
       GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-      FROM_BRANCH: ${{ steps.hello.outputs.isPushToStaging }}
+      FROM_BRANCH: ${{ steps.hello.outputs.stagingBranch }}
       TO_BRANCH: "master"
    - name: Open PR current branch is prod
      if: ${{ steps.hello.outputs.isPushToProd == 'true' }}
