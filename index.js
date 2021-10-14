@@ -20,6 +20,7 @@ try {
  //to do: fix for december
  const isPushToStaging = currentBranch === stagingBranch
  const isPushToProd = currentBranch === productionBranch
+ core.setOutput("masterBranch", masterBranch)
  core.setOutput("productionBranch", productionBranch)
  core.setOutput("stagingBranch", stagingBranch)
  core.setOutput("isPushToStaging", isPushToStaging)
