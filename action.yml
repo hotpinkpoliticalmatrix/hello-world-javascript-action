@@ -1,8 +1,8 @@
-name: "Hello World"
-description: "Greet someone and record the time"
+name: "Automate opening hotfix PRs upstream"
+description: "Automatically open PRs from prod --> staging and staging --> master"
 inputs:
  current-branch: # id of input
-  description: "Who to greet"
+  description: "Get current branch"
   required: true
 outputs:
  hotfix: # id of output
