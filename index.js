@@ -3,15 +3,13 @@ const github = require("@actions/github")
 
 try {
  //get current branch from input
- const currentBranch = core.getInput("who-to-greet")
+ const currentBranch = core.getInput("current-branch")
  const getWeek = (date = new Date()) => {
   const oneJan = new Date(date.getFullYear(), 0, 1)
   const numberOfDays = Math.floor((date - oneJan) / (24 * 60 * 60 * 1000))
   const result = Math.floor((date.getDay() + 1 + numberOfDays) / 7)
   return result
  }
- console.log(`Hello ${currentBranch}!`)
- const time = new Date().toTimeString()
  const currYear = new Date().getFullYear()
  const currWeek = getWeek()
  const productionBranch = `release/${currYear}.${currWeek}`
@@ -25,7 +23,6 @@ try {
  core.setOutput("stagingBranch", stagingBranch)
  core.setOutput("isPushToStaging", isPushToStaging)
  core.setOutput("isPushToProduction", isPushToProd)
- console.log(productionBranch, isPushToProd)
 
  // Get the JSON webhook payload for the event that triggered the workflow
  //  const payload = JSON.stringify(github.context.payload, undefined, 2)
