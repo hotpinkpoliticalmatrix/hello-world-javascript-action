@@ -15,7 +15,12 @@ try {
  const currYear = new Date().getFullYear()
  const currWeek = getWeek()
  const productionBranch = `release/${currYear}.${currWeek}`
+ const stagingBranch = `release/${currYear}.${currWeek + 1}`
+ const masterBranch = `release/${currYear}.${currWeek + 2}`
+ //to do: fix for december
+
  core.setOutput("productionBranch", productionBranch)
+ core.setOutput("stagingBranch", stagingBranch)
 
  // Get the JSON webhook payload for the event that triggered the workflow
  const payload = JSON.stringify(github.context.payload, undefined, 2)
