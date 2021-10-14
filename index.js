@@ -4,11 +4,18 @@ const github = require("@actions/github")
 try {
  // `who-to-greet` input defined in action metadata file
  const nameToGreet = core.getInput("who-to-greet")
+ const getWeek = (date = new Date()) => {
+  const oneJan = new Date(date.getFullYear(), 0, 1)
+  const numberOfDays = Math.floor((date - oneJan) / (24 * 60 * 60 * 1000))
+  const result = Math.floor((date.getDay() + 1 + numberOfDays) / 7)
+  return result
+ }
  console.log(`Hello ${nameToGreet}!`)
  const time = new Date().toTimeString()
  const currYear = new Date().getFullYear()
+ const currWeek = getWeek()
+ core.setOutput("currWeek", currWeek)
 
- core.setOutput("currYear", currYear)
  // Get the JSON webhook payload for the event that triggered the workflow
  const payload = JSON.stringify(github.context.payload, undefined, 2)
  console.log(`The event payload: ${payload}`)
