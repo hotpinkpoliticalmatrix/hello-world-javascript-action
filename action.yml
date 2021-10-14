@@ -1,28 +1,12 @@
 name: "Hello World"
 description: "Greet someone and record the time"
 inputs:
- who-to-greet: # id of input
+ current-branch: # id of input
   description: "Who to greet"
   required: true
-  default: "World"
 outputs:
- time: # id of output
-  description: "The time we greeted you"
+ hotfix: # id of output
+  description: "Branch information"
 runs:
  using: "node12"
  main: "index.js"
-# name: "Hello World"
-# description: "Greet someone and record the time"
-# inputs:
-#  current-branch: # id of input
-#   description: "Get current branch"
-#   required: true
-#   default: "Staging"
-# outputs:
-#  branch-name: # id of output
-#   description: "The time we greeted you"
-# runs:
-#  using: "node12"
-#  main: "index.js"
-
-#testing whether this runs
