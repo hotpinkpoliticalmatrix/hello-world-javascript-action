@@ -1,12 +1,13 @@
-on: [push]
+on:
+ push:
+  branches:
+   - "release/**"
 
 jobs:
  hello_world_job:
   runs-on: ubuntu-latest
-  name: A job to say hello
+  name: Automate opening hotfix PRs upstream
   steps:
-   # To use this repository's private action,
-   # you must check out the repository
    - name: Extract branch name
      shell: bash
      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
@@ -14,7 +15,7 @@ jobs:
    - name: Checkout
      uses: actions/checkout@v2
    - name: Hello world action step
-     uses: ./ # Uses an action in the root directory
+     uses: ./ # Where the script will live
      id: hello
      with:
       who-to-greet: ${{ steps.extract_branch.outputs.branch }}
@@ -23,10 +24,12 @@ jobs:
      run: echo "The production branch is ${{ steps.hello.outputs.productionBranch }}"
    - name: Get the staging branch
      run: echo "The staging branch is ${{ steps.hello.outputs.stagingBranch }}"
+
    - name: Confirm push was to staging
      run: echo "The merge was made to staging is ${{ steps.hello.outputs.isPushToStaging }}"
    - name: Confirm push was to prod
      run: echo "The merge was made to prod is ${{ steps.hello.outputs.isPushToProduction }}"
+
    - name: Open PR current branch is staging
      if: ${{ steps.hello.outputs.isPushToStaging == 'true' }}
      id: pullmaster
