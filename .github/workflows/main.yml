@@ -7,16 +7,12 @@ jobs:
   steps:
    # To use this repository's private action,
    # you must check out the repository
-   - name: Checkout
-     uses: actions/checkout@v2
-   - name: Set up Node
-     uses: actions/setup-node@v1
-     with:
-      node-version: 12
    - name: Extract branch name
      shell: bash
      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
      id: extract_branch
+   - name: Checkout
+     uses: actions/checkout@v2
    - name: Hello world action step
      uses: ./ # Uses an action in the root directory
      id: hello
@@ -34,13 +30,6 @@ jobs:
    - name: Open PR current branch is staging
      if: steps.hello.outputs.isPushToStaging == true
      run: echo "The merge was made to prod is ${{ steps.hello.outputs.isPushToProd }}"
-
-     #  id: pull
-     #  uses: tretuna/sync-branches@1.4.0
-     #  with:
-     #   GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-     #   FROM_BRANCH: ${{ steps.hello.outputs.stagingBranch }}
-     #   TO_BRANCH: "master"
 
      #   uses: tretuna/sync-branches@1.2.0
      #     with:
