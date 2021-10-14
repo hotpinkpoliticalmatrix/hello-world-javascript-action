@@ -9,4 +9,4 @@ outputs:
   description: "Branch information"
 runs:
  using: "node12"
- main: "index.js"
+ main: "./script/index.js"
