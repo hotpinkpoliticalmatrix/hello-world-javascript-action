@@ -26,7 +26,7 @@ try {
  //get current branch from input
  const currentBranch = core.getInput("current-branch")
  const currentTag = core.getInput("current-tag")
- console.log(currentTag)
+ console.log("current tag:", currentTag)
 
  const currWeek = getWeek()
  const { currYear, stagingWeek, stagingYear } = adjustForYearEnd(currWeek)
