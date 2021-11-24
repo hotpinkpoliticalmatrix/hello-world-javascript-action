@@ -8,73 +8,82 @@ jobs:
   runs-on: ubuntu-latest
   name: Automate opening hotfix PRs upstream
   steps:
-   - name: Extract current tag
-     id: extract_current_tag
-     run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
-   - name: Set current tag
-     env:
-      RELEASE_VERSION: ${{ steps.extract_current_tag.outputs.tag }}
-     run: |
-      echo $RELEASE_VERSION
-      echo ${{ steps.extract_current_tag.outputs.tag }}
-
-   - name: Alt tag?
-     id: alt_tag
-     run: echo ::set-output name=alt_tag::$(echo ${GITHUB_REF:10})
-   - name: Set alt tag
-     env:
-      ALT_TAG: ${{ steps.alt_tag.outputs.alt_tag }}
-     run: |
-      echo $ALT_TAG is here
-
-   - name: Extract branch name
-     shell: bash
-     run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-     id: extract_branch
-
-   - name: Checkout
-     uses: actions/checkout@v2
-
-   - uses: actions-ecosystem/action-release-label@v1
-     id: get-latest-tag
-
-   - name: get ecosystem output
-     run: echo ${{ steps.get-latest-tag.outputs.tag }}
-
-   - name: Hotfix action step
-     uses: ./.github/actions/open-pr-from-hotfix # Where the script will live
-     id: hotfix
+   - name: Extract tag name
+     id: tag
+     uses: actions/github-script@0.2.0
      with:
-      current-tag: ${{ steps.extract_current_tag.outputs.tag}}
-      current-branch: ${{ steps.extract_branch.outputs.branch }}
-   # Use the output from the `hotfix` step
+      github-token: ${{ secrets.GITHUB_TOKEN }}
+      script: |
+       return context.payload.ref.replace(/\/refs\/tags\//, '');
+   - name: Echo
+     run: echo ${{ steps.tag.outputs.result }}
+  #  - name: Extract current tag
+  #    id: extract_current_tag
+  #    run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+  #  - name: Set current tag
+  #    env:
+  #     RELEASE_VERSION: ${{ steps.extract_current_tag.outputs.tag }}
+  #    run: |
+  #     echo $RELEASE_VERSION
+  #     echo ${{ steps.extract_current_tag.outputs.tag }}
 
-   - name: Get the production branch
-     run: echo "The production branch is ${{ steps.hotfix.outputs.productionBranch }}"
+  #  - name: Alt tag?
+  #    id: alt_tag
+  #    run: echo ::set-output name=alt_tag::$(echo ${GITHUB_REF:10})
+  #  - name: Set alt tag
+  #    env:
+  #     ALT_TAG: ${{ steps.alt_tag.outputs.alt_tag }}
+  #    run: |
+  #     echo $ALT_TAG is here
 
-   - name: Get the staging branch
-     run: echo "The staging branch is ${{ steps.hotfix.outputs.stagingBranch }}"
+  #  - name: Extract branch name
+  #    shell: bash
+  #    run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+  #    id: extract_branch
 
-   # Check whether push was made to staging or prod
-   - name: Confirm push was to staging
-     run: echo "The merge was made to staging is ${{ steps.hotfix.outputs.isPushToStaging }}"
-   - name: Confirm push was to prod
-     run: echo "The merge was made to prod is ${{ steps.hotfix.outputs.isPushToProduction }}"
+  #  - name: Checkout
+  #    uses: actions/checkout@v2
 
-   # Open PR against next upstream branch
-   - name: Open PR against master if current branch is staging
-     if: ${{ steps.hotfix.outputs.isPushToStaging == 'true' }}
-     id: pullmaster
-     uses: tretuna/sync-branches@1.4.0
-     with:
-      GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-      FROM_BRANCH: ${{ steps.hotfix.outputs.stagingBranch }}
-      TO_BRANCH: "master"
-   - name: Open PR against staging if current branch is prod
-     if: ${{ steps.hotfix.outputs.isPushToProduction == 'true' }}
-     id: pullstaging
-     uses: tretuna/sync-branches@1.4.0
-     with:
-      GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-      FROM_BRANCH: ${{ steps.hotfix.outputs.productionBranch }}
-      TO_BRANCH: ${{ steps.hotfix.outputs.stagingBranch }}
+  #  - uses: actions-ecosystem/action-release-label@v1
+  #    id: get-latest-tag
+
+  #  - name: get ecosystem output
+  #    run: echo ${{ steps.get-latest-tag.outputs.tag }}
+
+  #  - name: Hotfix action step
+  #    uses: ./.github/actions/open-pr-from-hotfix # Where the script will live
+  #    id: hotfix
+  #    with:
+  #     current-tag: ${{ steps.extract_current_tag.outputs.tag}}
+  #     current-branch: ${{ steps.extract_branch.outputs.branch }}
+  #  # Use the output from the `hotfix` step
+
+  #  - name: Get the production branch
+  #    run: echo "The production branch is ${{ steps.hotfix.outputs.productionBranch }}"
+
+  #  - name: Get the staging branch
+  #    run: echo "The staging branch is ${{ steps.hotfix.outputs.stagingBranch }}"
+
+  #  # Check whether push was made to staging or prod
+  #  - name: Confirm push was to staging
+  #    run: echo "The merge was made to staging is ${{ steps.hotfix.outputs.isPushToStaging }}"
+  #  - name: Confirm push was to prod
+  #    run: echo "The merge was made to prod is ${{ steps.hotfix.outputs.isPushToProduction }}"
+
+  #  # Open PR against next upstream branch
+  #  - name: Open PR against master if current branch is staging
+  #    if: ${{ steps.hotfix.outputs.isPushToStaging == 'true' }}
+  #    id: pullmaster
+  #    uses: tretuna/sync-branches@1.4.0
+  #    with:
+  #     GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+  #     FROM_BRANCH: ${{ steps.hotfix.outputs.stagingBranch }}
+  #     TO_BRANCH: "master"
+  #  - name: Open PR against staging if current branch is prod
+  #    if: ${{ steps.hotfix.outputs.isPushToProduction == 'true' }}
+  #    id: pullstaging
+  #    uses: tretuna/sync-branches@1.4.0
+  #    with:
+  #     GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+  #     FROM_BRANCH: ${{ steps.hotfix.outputs.productionBranch }}
+  #     TO_BRANCH: ${{ steps.hotfix.outputs.stagingBranch }}
