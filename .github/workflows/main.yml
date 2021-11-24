@@ -8,15 +8,15 @@ jobs:
   runs-on: ubuntu-latest
   name: Automate opening hotfix PRs upstream
   steps:
-   - name: Set output
+   - name: Extract current tag
      id: extract_current_tag
-     run: echo "##[set-output name=tag;]$(echo ${GITHUB_REF#refs/*/})"
-   - name: Check output
+     run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+   - name: Set current tag
      env:
-      RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
+      RELEASE_VERSION: ${{ steps.extract_current_tag.outputs.tag }}
      run: |
       echo $RELEASE_VERSION
-      echo ${{ steps.vars.outputs.tag }}
+      echo ${{ steps.extract_current_tag.outputs.tag }}
 
    - name: Extract branch name
      shell: bash
