@@ -18,6 +18,15 @@ jobs:
       echo $RELEASE_VERSION
       echo ${{ steps.extract_current_tag.outputs.tag }}
 
+   - name: Alt tag?
+     id: alt_tag
+     run: echo ::set-env name=ALT_TAG::$(echo ${GITHUB_REF:10})
+   - name: Set alt tag
+     env:
+      ALT_TAG: ${{ steps.alt_tag.outputs.tag }}
+     run: |
+      echo $ALT_TAG
+
    - name: Extract branch name
      shell: bash
      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
