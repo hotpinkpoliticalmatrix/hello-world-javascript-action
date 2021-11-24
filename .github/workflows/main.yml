@@ -20,10 +20,10 @@ jobs:
 
    - name: Alt tag?
      id: alt_tag
-     run: echo ::set-env name=ALT_TAG::$(echo ${GITHUB_REF:10})
+     run: echo ::set-output name=alt_tag::$(echo ${GITHUB_REF:10})
    - name: Set alt tag
      env:
-      ALT_TAG: ${{ steps.alt_tag.outputs.tag }}
+      ALT_TAG: ${{ steps.alt_tag.outputs.alt_tag }}
      run: |
       echo $ALT_TAG
 
