@@ -35,6 +35,12 @@ jobs:
    - name: Checkout
      uses: actions/checkout@v2
 
+   - uses: actions-ecosystem/action-release-label@v1
+     id: get-latest-tag
+
+   - name: get ecosystem output
+     run: echo ${{ steps.get-latest-tag.outputs.tag }}
+
    - name: Hotfix action step
      uses: ./.github/actions/open-pr-from-hotfix # Where the script will live
      id: hotfix
