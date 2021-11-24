@@ -31,17 +31,21 @@ jobs:
      shell: bash
      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
      id: extract_branch
+
    - name: Checkout
      uses: actions/checkout@v2
+
    - name: Hotfix action step
      uses: ./.github/actions/open-pr-from-hotfix # Where the script will live
      id: hotfix
      with:
-      current-tag: ${{ steps.extract_current_tag.output.tag}}
+      current-tag: ${{ steps.extract_current_tag.outputs.tag}}
       current-branch: ${{ steps.extract_branch.outputs.branch }}
    # Use the output from the `hotfix` step
+
    - name: Get the production branch
      run: echo "The production branch is ${{ steps.hotfix.outputs.productionBranch }}"
+
    - name: Get the staging branch
      run: echo "The staging branch is ${{ steps.hotfix.outputs.stagingBranch }}"
 
