@@ -10,7 +10,7 @@ jobs:
   steps:
    - name: Set output
      id: extract_current_tag
-     run: echo "##[set-output name=tag;]$(echo ${GITHUB_REF#refs/*/})""
+     run: echo "##[set-output name=tag;]$(echo ${GITHUB_REF#refs/*/})"
    - name: Check output
      env:
       RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
