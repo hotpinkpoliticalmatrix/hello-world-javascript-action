@@ -8,13 +8,16 @@ jobs:
   runs-on: ubuntu-latest
   name: Automate opening hotfix PRs upstream
   steps:
-   - name: Extract tag name
+   #  - name: Extract tag name
+   #    id: tag
+   #    uses: actions/github-script@0.2.0
+   #    with:
+   #     github-token: ${{ secrets.GITHUB_TOKEN }}
+   #     script: |
+   #      return context.payload.ref.replace(/\/refs\/tags\//, '');
+   - name: Get the version
      id: tag
-     uses: actions/github-script@0.2.0
-     with:
-      github-token: ${{ secrets.GITHUB_TOKEN }}
-      script: |
-       return context.payload.ref.replace(/\/refs\/tags\//, '');
+     run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
    - name: Echo
      run: echo ${{ steps.tag.outputs.result }}
   #  - name: Extract current tag
