@@ -25,7 +25,7 @@ jobs:
      env:
       ALT_TAG: ${{ steps.alt_tag.outputs.alt_tag }}
      run: |
-      echo $ALT_TAG
+      echo $ALT_TAG is here
 
    - name: Extract branch name
      shell: bash
