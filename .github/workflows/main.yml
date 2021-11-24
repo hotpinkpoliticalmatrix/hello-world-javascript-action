@@ -19,7 +19,7 @@ jobs:
      id: tag
      run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
    - name: Echo
-     run: echo ${{ steps.tag.outputs.result }}
+     run: echo ${{ steps.tag.outputs.VERSION }}
   #  - name: Extract current tag
   #    id: extract_current_tag
   #    run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
