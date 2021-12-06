@@ -15,11 +15,15 @@ jobs:
    #     github-token: ${{ secrets.GITHUB_TOKEN }}
    #     script: |
    #      return context.payload.ref.replace(/\/refs\/tags\//, '');
-   - name: Get the version
-     id: tag
-     run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
+   - name: get latest tag
+     uses: actions-ecosystem/action-get-latest-tag@v1
+     id: get-latest-tag
+
+   #  - name: Get the version
+   #    id: tag
+   #    run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
    - name: Echo
-     run: echo ${{ steps.tag.outputs.VERSION }}
+     run: echo ${{ steps.get-latest-tag.outputs.tag }}
   #  - name: Extract current tag
   #    id: extract_current_tag
   #    run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
