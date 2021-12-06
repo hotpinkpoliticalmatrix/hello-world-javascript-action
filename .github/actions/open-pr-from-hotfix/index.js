@@ -36,11 +36,11 @@ try {
  console.log(
   currentTag,
   currentTag.slice(0, 4),
-  currentTag.slice(5, 7)
-  // productionBranch,
-  // stagingBranch,
-  // isPushToProduction,
-  // isPushToStaging
+  currentTag.slice(5, 7),
+  productionBranch,
+  stagingBranch,
+  isPushToProduction,
+  isPushToStaging
  )
  core.setOutput("productionBranch", productionBranch)
  core.setOutput("stagingBranch", stagingBranch)
