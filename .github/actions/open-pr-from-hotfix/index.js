@@ -40,7 +40,8 @@ try {
   productionBranch,
   stagingBranch,
   isPushToProduction,
-  isPushToStaging
+  isPushToStaging,
+  "test"
  )
  core.setOutput("productionBranch", productionBranch)
  core.setOutput("stagingBranch", stagingBranch)
