@@ -9,7 +9,10 @@ jobs:
   name: Automate opening hotfix PRs upstream
   steps:
    - uses: actions/checkout@v2
-
+   - name: Extract branch name
+     shell: bash
+     run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+     id: extract_branch
    - uses: actions-ecosystem/action-release-label@v1
      id: release-label
      #  if: ${{ github.event.pull_request.merged == true }}
@@ -18,6 +21,12 @@ jobs:
      #  if: ${{ steps.release-label.outputs.level != null }
    - name: print latest tag
      run: echo ${{ steps.get-latest-tag.outputs.tag }}
+   - name: Hotfix action step
+     uses: ./.github/actions/open-pr-from-hotfix # Where the script will live
+     id: hotfix
+     with:
+      current-tag: ${{ steps.get-latest-tag.outputs.tag}}
+      current-branch: ${{ steps.extract_branch.outputs.branch }}
   #  - uses: actions-ecosystem/action-bump-semver@v1
   #    id: bump-semver
   #    #  if: ${{ steps.release-label.outputs.level != null }}

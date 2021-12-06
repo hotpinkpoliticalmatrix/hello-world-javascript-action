@@ -25,13 +25,11 @@ const adjustForYearEnd = (currWeek) => {
 try {
  //get current branch from input
  const currentBranch = core.getInput("current-branch")
-
- const currWeek = getWeek()
- const { currYear, stagingWeek, stagingYear } = adjustForYearEnd(currWeek)
-
- const productionBranch = `release/${currYear}.${currWeek}`
- const stagingBranch = `release/${stagingYear}.${stagingWeek}`
- //to do: fix for december
+ const currentTag = core.getInput("current-tag")
+ const tagYear = currentTag.slice(0, 4)
+ const tagWeek = currentTag.slice(5, 7)
+ const productionBranch = `release/${tagYear}.${tagWeek}`
+ const stagingBranch = `release/${tagYear}.${parseInt(tagWeek, 10) + 1}`
  const isPushToStaging = currentBranch === stagingBranch
  const isPushToProduction = currentBranch === productionBranch
 
