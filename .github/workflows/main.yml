@@ -15,10 +15,9 @@ jobs:
      id: extract_branch
    - uses: actions-ecosystem/action-release-label@v1
      id: release-label
-     #  if: ${{ github.event.pull_request.merged == true }}
    - uses: actions-ecosystem/action-get-latest-tag@v1
      id: get-latest-tag
-     #  if: ${{ steps.release-label.outputs.level != null }
+     if: ${{ steps.release-label.outputs.level != null }}
    - name: print latest tag
      run: echo ${{ steps.get-latest-tag.outputs.tag }}
    - name: Hotfix action step
