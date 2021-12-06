@@ -12,24 +12,43 @@ jobs:
 
    - uses: actions-ecosystem/action-release-label@v1
      id: release-label
-     if: ${{ github.event.pull_request.merged == true }}
-
-     #  - name: Extract tag name
-     #    id: tag
-     #    uses: actions/github-script@0.2.0
-     #    with:
-     #     github-token: ${{ secrets.GITHUB_TOKEN }}
-     #     script: |
-     #      return context.payload.ref.replace(/\/refs\/tags\//, '');
+     if: ${{ github.event.pull_request.merged == true }
    - uses: actions-ecosystem/action-get-latest-tag@v1
      id: get-latest-tag
+     if: ${{ steps.release-label.outputs.level != null }
+   - uses: actions-ecosystem/action-bump-semver@v1
+     id: bump-semver
      if: ${{ steps.release-label.outputs.level != null }}
+     with:
+      current_version: ${{ steps.get-latest-tag.outputs.tag }}
+      level: ${{ steps.release-label.outputs.level }
+   - uses: actions-ecosystem/action-push-tag@v1
+     if: ${{ steps.release-label.outputs.level != null }}
+     with:
+      tag: ${{ steps.bump-semver.outputs.new_version }}
+      message: "${{ steps.bump-semver.outputs.new_version }}: PR #${{ github.event.pull_request.number }} ${{ github.event.pull_request.title }}"
+  #   - uses: actions/checkout@v2
 
-     #  - name: Get the version
-     #    id: tag
-     #    run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
-   - name: Echo
-     run: echo ${{ steps.get-latest-tag.outputs.tag }}
+  #  - uses: actions-ecosystem/action-release-label@v1
+  #    id: release-label
+  #    if: ${{ github.event.pull_request.merged == true }}
+
+  #  - name: Extract tag name
+  #    id: tag
+  #    uses: actions/github-script@0.2.0
+  #    with:
+  #     github-token: ${{ secrets.GITHUB_TOKEN }}
+  #     script: |
+  #      return context.payload.ref.replace(/\/refs\/tags\//, '');
+  #  - uses: actions-ecosystem/action-get-latest-tag@v1
+  #    id: get-latest-tag
+  #    if: ${{ steps.release-label.outputs.level != null }}
+
+  #  - name: Get the version
+  #    id: tag
+  #    run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
+  #  - name: Echo
+  #    run: echo ${{ steps.get-latest-tag.outputs.tag }}
   #  - name: Extract current tag
   #    id: extract_current_tag
   #    run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
