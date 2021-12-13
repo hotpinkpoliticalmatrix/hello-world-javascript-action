@@ -6,12 +6,12 @@ try {
  const tagYear = parseInt(currentTag.slice(0, 4), 10)
  const tagWeek = parseInt(currentTag.slice(5, 7), 10)
  const productionBranch = `release/${tagYear}.${tagWeek}`
+
  let stagingBranch
- if (tagWeek === 52) {
-  stagingBranch = `release/${tagYear + 1}.01`
- } else {
-  stagingBranch = `release/${tagYear}.${tagWeek + 1}`
- }
+ tagWeek === 52
+  ? (stagingBranch = `release/${tagYear + 1}.01`)
+  : (stagingBranch = `release/${tagYear}.${tagWeek + 1}`)
+
  const isPushToStaging = currentBranch === stagingBranch
  const isPushToProduction = currentBranch === productionBranch
 
@@ -20,6 +20,5 @@ try {
  core.setOutput("isPushToStaging", isPushToStaging)
  core.setOutput("isPushToProduction", isPushToProduction)
 } catch (error) {
- console.error("hello world")
  core.setFailed(error.message)
 }
