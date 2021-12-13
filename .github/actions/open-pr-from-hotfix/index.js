@@ -1,23 +1,23 @@
 const core = require("@actions/core")
-const github = require("@actions/github")
 
 const formatForSingleDigitWeeks = (weekNum) => {
- return weekNum.length === 1 ? `0${weekNum}` : weekNum
+ return weekNum < 10 ? `0${weekNum}` : weekNum
 }
 
 try {
  const currentBranch = core.getInput("current-branch")
  const currentTag = core.getInput("current-tag")
- const tagYear = currentTag.slice(0, 4)
- const tagWeek = currentTag.slice(5, 7)
- const productionBranch = `release/${tagYear}.${tagWeek}`
+ const stringifiedTagYear = currentTag.slice(0, 4)
+ const stringifiedTagWeek = currentTag.slice(5, 7)
+ const productionBranch = `release/${stringifiedTagYear}.${stringifiedTagWeek}`
+ const numericTagYear = parseInt(stringifiedTagYear, 10)
+ const numericTagWeek = parseInt(stringifiedTagWeek, 10)
 
  let stagingBranch
-
- tagWeek === 52
-  ? (stagingBranch = `release/${tagYear + 1}.01`)
-  : (stagingBranch = `release/${tagYear}.${formatForSingleDigitWeeks(
-     tagWeek + 1
+ numericTagWeek === 52
+  ? (stagingBranch = `release/${numericTagYear + 1}.01`)
+  : (stagingBranch = `release/${numericTagYear}.${formatForSingleDigitWeeks(
+     numericTagWeek + 1
     )}`)
 
  const isPushToStaging = currentBranch === stagingBranch
