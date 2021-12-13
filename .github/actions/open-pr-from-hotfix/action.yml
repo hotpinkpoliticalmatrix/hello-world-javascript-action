@@ -4,12 +4,12 @@ inputs:
  current-branch: # id of input
   description: "Get current branch"
   required: true
- current-tag:
+ current-tag: # most current tag across all branches
   description: "Get current tag"
   required: true
 outputs:
  hotfix: # id of output
   description: "Branch information"
 runs:
- using: "node12"
+ using: "node16"
  main: "index.js"
