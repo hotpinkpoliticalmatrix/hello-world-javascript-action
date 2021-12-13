@@ -60,3 +60,11 @@ jobs:
       GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
       FROM_BRANCH: ${{ steps.hotfix.outputs.productionBranch }}
       TO_BRANCH: ${{ steps.hotfix.outputs.stagingBranch }}
+   - name: Open PR against master if staging has not yet been created
+     if: ${{ failure() }}
+     id: open-pr-against-master
+     uses: tretuna/sync-branches@1.4.0
+     with:
+      GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      FROM_BRANCH: ${{ steps.hotfix.outputs.productionBranch }}
+      TO_BRANCH: "master"
