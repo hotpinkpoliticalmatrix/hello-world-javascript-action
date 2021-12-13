@@ -4,7 +4,7 @@ on:
    - "release/**"
 
 jobs:
- hello_world_job:
+ automate-hotfix-prs:
   runs-on: ubuntu-latest
   name: Automate opening hotfix PRs upstream
   steps:
@@ -42,6 +42,7 @@ jobs:
      run: echo "The merge was made to prod is ${{ steps.hotfix.outputs.isPushToProduction }}"
 
    # Open PR against next upstream branch
+   # Master
    - name: Open PR against master if current branch is staging
      if: ${{ steps.hotfix.outputs.isPushToStaging == 'true' }}
      id: open-pr-against-master
@@ -50,6 +51,7 @@ jobs:
       GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
       FROM_BRANCH: ${{ steps.hotfix.outputs.stagingBranch }}
       TO_BRANCH: "master"
+   # Staging
    - name: Open PR against staging if current branch is prod
      if: ${{ steps.hotfix.outputs.isPushToProduction == 'true' }}
      id: open-pr-against-staging
