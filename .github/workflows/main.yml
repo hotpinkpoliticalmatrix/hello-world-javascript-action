@@ -4,7 +4,7 @@ on:
    - "release/**"
 
 jobs:
- hello_world_job:
+ automate-hotfix-prs:
   runs-on: ubuntu-latest
   name: Automate opening hotfix PRs upstream
   steps:
