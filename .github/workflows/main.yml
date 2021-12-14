@@ -15,9 +15,11 @@ jobs:
      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
      id: extract_branch
    # Get latest tag
-   - uses: actions-ecosystem/action-release-label@v1
+   - name: Get release label
+     uses: actions-ecosystem/action-release-label@v1
      id: release-label
-   - uses: actions-ecosystem/action-get-latest-tag@v1
+   - name: Get latest tag
+     uses: actions-ecosystem/action-get-latest-tag@v1
      id: get-latest-tag
    - name: print latest tag
      run: echo ${{ steps.get-latest-tag.outputs.tag }}
