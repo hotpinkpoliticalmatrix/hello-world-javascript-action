@@ -1,28 +1,33 @@
 on:
- push:
+ pull_request:
   branches:
    - "release/**"
+  types: [closed]
 
 jobs:
  automate-hotfix-prs:
   runs-on: ubuntu-latest
   name: Automate opening hotfix PRs upstream
+  if: github.event.pull_request.merged
   steps:
-   - uses: actions/checkout@v2
+   - name: Checkout
+     uses: actions/checkout@v2
    - name: Extract branch name
      shell: bash
      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
      id: extract_branch
    # Get latest tag
-   - uses: actions-ecosystem/action-release-label@v1
+   - name: Get release label
+     uses: actions-ecosystem/action-release-label@v1
      id: release-label
-   - uses: actions-ecosystem/action-get-latest-tag@v1
+   - name: Get latest tag
+     uses: actions-ecosystem/action-get-latest-tag@v1
      id: get-latest-tag
    - name: print latest tag
      run: echo ${{ steps.get-latest-tag.outputs.tag }}
    # Generate prod and staging branches based on tag
    - name: Hotfix action step
-     uses: ./.github/actions/open-pr-from-hotfix # Where the script will live
+     uses: ./.github/actions/automate-pr-from-hotfix # Where the script will live
      id: hotfix
      with:
       current-tag: ${{ steps.get-latest-tag.outputs.tag}}
