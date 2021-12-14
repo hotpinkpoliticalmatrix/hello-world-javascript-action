@@ -1,8 +1,8 @@
 on:
- pull_request:
+ push:
   branches:
-   - hotfix/**'
-  types: [closed]
+   - release/**'
+  # types: [closed]
 
 jobs:
  automate-hotfix-prs:
