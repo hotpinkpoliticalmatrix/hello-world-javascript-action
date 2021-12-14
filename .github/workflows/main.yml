@@ -8,15 +8,18 @@ jobs:
   runs-on: ubuntu-latest
   name: Automate opening hotfix PRs upstream
   steps:
-   - uses: actions/checkout@v2
+   - name: Checkout
+     run: actions/checkout@v2
    - name: Extract branch name
      shell: bash
      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
      id: extract_branch
    # Get latest tag
-   - uses: actions-ecosystem/action-release-label@v1
+   - name: Get release label
+     uses: actions-ecosystem/action-release-label@v1
      id: release-label
-   - uses: actions-ecosystem/action-get-latest-tag@v1
+   - name: Get release tag
+     uses: actions-ecosystem/action-get-latest-tag@v1
      id: get-latest-tag
    - name: print latest tag
      run: echo ${{ steps.get-latest-tag.outputs.tag }}
@@ -60,6 +63,7 @@ jobs:
       GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
       FROM_BRANCH: ${{ steps.hotfix.outputs.productionBranch }}
       TO_BRANCH: ${{ steps.hotfix.outputs.stagingBranch }}
+   # If staging has not yet been created, open PR against master
    - name: Open PR against master if staging has not yet been created
      if: ${{ failure() }}
      id: open-pr-against-master-on-staging-failure
