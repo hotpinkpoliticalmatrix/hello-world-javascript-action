@@ -1,73 +1,75 @@
 on:
-  push:
-    branches:
-      - 'release/**'
+ pull_request:
+  branches:
+   - release/**'
+  types: [closed]
 
 jobs:
-  automate-hotfix-prs:
-    runs-on: ubuntu-latest
-    name: Automate opening hotfix PRs upstream
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Extract branch name
-        shell: bash
-        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-        id: extract_branch
-      # Get latest tag
-      - name: Get release label
-        uses: actions-ecosystem/action-release-label@v1
-        id: release-label
-      - name: Get latest tag
-        uses: actions-ecosystem/action-get-latest-tag@v1
-        id: get-latest-tag
-      - name: print latest tag
-        run: echo ${{ steps.get-latest-tag.outputs.tag }}
-      # Generate prod and staging branches based on tag
-      - name: Hotfix action step
-        uses: ./.github/actions/automate-pr-from-hotfix # Where the script will live
-        id: hotfix
-        with:
-          current-tag: ${{ steps.get-latest-tag.outputs.tag}}
-          current-branch: ${{ steps.extract_branch.outputs.branch }}
+ automate-hotfix-prs:
+  runs-on: ubuntu-latest
+  name: Automate opening hotfix PRs upstream
+  if: github.events.pull_request.merged == true
+  steps:
+   - name: Checkout
+     uses: actions/checkout@v2
+   - name: Extract branch name
+     shell: bash
+     run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+     id: extract_branch
+   # Get latest tag
+   - name: Get release label
+     uses: actions-ecosystem/action-release-label@v1
+     id: release-label
+   - name: Get latest tag
+     uses: actions-ecosystem/action-get-latest-tag@v1
+     id: get-latest-tag
+   - name: print latest tag
+     run: echo ${{ steps.get-latest-tag.outputs.tag }}
+   # Generate prod and staging branches based on tag
+   - name: Hotfix action step
+     uses: ./.github/actions/automate-pr-from-hotfix # Where the script will live
+     id: hotfix
+     with:
+      current-tag: ${{ steps.get-latest-tag.outputs.tag}}
+      current-branch: ${{ steps.extract_branch.outputs.branch }}
 
-      # Use the output from the `hotfix` step
-      - name: Get the production branch
-        run: echo "The production branch is ${{ steps.hotfix.outputs.productionBranch }}"
+   # Use the output from the `hotfix` step
+   - name: Get the production branch
+     run: echo "The production branch is ${{ steps.hotfix.outputs.productionBranch }}"
 
-      - name: Get the staging branch
-        run: echo "The staging branch is ${{ steps.hotfix.outputs.stagingBranch }}"
+   - name: Get the staging branch
+     run: echo "The staging branch is ${{ steps.hotfix.outputs.stagingBranch }}"
 
-      # Check whether push was made to staging or prod
-      - name: Confirm push was to staging
-        run: echo "The merge was made to staging is ${{ steps.hotfix.outputs.isPushToStaging }}"
-      - name: Confirm push was to prod
-        run: echo "The merge was made to prod is ${{ steps.hotfix.outputs.isPushToProduction }}"
+   # Check whether push was made to staging or prod
+   - name: Confirm push was to staging
+     run: echo "The merge was made to staging is ${{ steps.hotfix.outputs.isPushToStaging }}"
+   - name: Confirm push was to prod
+     run: echo "The merge was made to prod is ${{ steps.hotfix.outputs.isPushToProduction }}"
 
-      # Open PR against next upstream branch
-      # Master
-      - name: Open PR against master if current branch is staging
-        if: ${{ steps.hotfix.outputs.isPushToStaging == 'true' }}
-        id: open-pr-against-master
-        uses: tretuna/sync-branches@1.4.0
-        with:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-          FROM_BRANCH: ${{ steps.hotfix.outputs.stagingBranch }}
-          TO_BRANCH: 'master'
-      # Staging
-      - name: Open PR against staging if current branch is prod
-        if: ${{ steps.hotfix.outputs.isPushToProduction == 'true' }}
-        id: open-pr-against-staging
-        uses: tretuna/sync-branches@1.4.0
-        with:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-          FROM_BRANCH: ${{ steps.hotfix.outputs.productionBranch }}
-          TO_BRANCH: ${{ steps.hotfix.outputs.stagingBranch }}
-      - name: Open PR against master if staging has not yet been created
-        if: ${{ failure() }}
-        id: open-pr-against-master-on-staging-failure
-        uses: tretuna/sync-branches@1.4.0
-        with:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-          FROM_BRANCH: ${{ steps.hotfix.outputs.productionBranch }}
-          TO_BRANCH: 'master'
+   # Open PR against next upstream branch
+   # Master
+   - name: Open PR against master if current branch is staging
+     if: ${{ steps.hotfix.outputs.isPushToStaging == 'true' }}
+     id: open-pr-against-master
+     uses: tretuna/sync-branches@1.4.0
+     with:
+      GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      FROM_BRANCH: ${{ steps.hotfix.outputs.stagingBranch }}
+      TO_BRANCH: "master"
+   # Staging
+   - name: Open PR against staging if current branch is prod
+     if: ${{ steps.hotfix.outputs.isPushToProduction == 'true' }}
+     id: open-pr-against-staging
+     uses: tretuna/sync-branches@1.4.0
+     with:
+      GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      FROM_BRANCH: ${{ steps.hotfix.outputs.productionBranch }}
+      TO_BRANCH: ${{ steps.hotfix.outputs.stagingBranch }}
+   - name: Open PR against master if staging has not yet been created
+     if: ${{ failure() }}
+     id: open-pr-against-master-on-staging-failure
+     uses: tretuna/sync-branches@1.4.0
+     with:
+      GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      FROM_BRANCH: ${{ steps.hotfix.outputs.productionBranch }}
+      TO_BRANCH: "master"
