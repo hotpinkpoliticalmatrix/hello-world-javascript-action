@@ -1,13 +1,12 @@
 on:
- pull_request:
+ push:
   branches:
-   - "release/**"
+   - release/**
 
 jobs:
  automate-hotfix-prs:
   runs-on: ubuntu-latest
   name: Automate opening hotfix PRs upstream
-  if: github.event.pull_request.merged == true
   steps:
    - name: Checkout
      uses: actions/checkout@v2
