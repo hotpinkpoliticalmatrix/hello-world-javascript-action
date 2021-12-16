@@ -1,8 +1,7 @@
 on:
  pull_request:
   branches:
-   - release/**
-  types: [closed]
+   - "release/**"
 
 jobs:
  automate-hotfix-prs:
